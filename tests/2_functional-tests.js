@@ -21,8 +21,8 @@ suite("Functional Tests", function() {
         .get("/api/stock-prices")
         .query({ stock: "goog" })
         .end(function(err, res) {
-          assert.isObject(res.body.stockData);
           assert.property(res.body, "stockData");
+          assert.isObject(res.body.stockData);
           assert.property(res.body.stockData, "likes");
           assert.property(res.body.stockData, "price");
           assert.property(res.body.stockData, "stock");
@@ -35,15 +35,14 @@ suite("Functional Tests", function() {
       chai
         .request(server)
         .get("/api/stock-prices")
-        .query({ stock: "goog" })
+        .query({ stock: "goog", like: true })
         .end(function(err, res) {
-          
           assert.isObject(res.body.stockData);
           assert.property(res.body, "stockData");
           assert.property(res.body.stockData, "likes");
           assert.property(res.body.stockData, "price");
           assert.property(res.body.stockData, "stock");
-          assert.propertyVal(res.body.stockData, "likes", 2);
+          assert.propertyVal(res.body.stockData, "likes", 1);
 
           //complete this one too
           done();
@@ -56,13 +55,12 @@ suite("Functional Tests", function() {
         .get("/api/stock-prices")
         .query({ stock: "goog", like: true })
         .end(function(err, res) {
-          
           assert.isObject(res.body.stockData);
           assert.property(res.body, "stockData");
           assert.property(res.body.stockData, "likes");
           assert.property(res.body.stockData, "price");
           assert.property(res.body.stockData, "stock");
-          assert.propertyVal(res.body.stockData, "likes", 2);
+          assert.propertyVal(res.body.stockData, "likes", 1);
 
           //complete this one too
           done();
@@ -73,21 +71,21 @@ suite("Functional Tests", function() {
       chai
         .request(server)
         .get("/api/stock-prices")
-        .query({ stock: ["goog", "aapl"] })
+        .query({ stock: ["amzn", "aapl"] })
         .end(function(err, res) {
           let result1 = res.body.stockData[0];
-          let result2 = res.body.stockData[1];        
-          
+          let result2 = res.body.stockData[1];
+
           assert.property(res.body, "stockData");
           assert.isArray(res.body.stockData);
           assert.property(result1, "rel_likes");
           assert.property(result1, "price");
           assert.property(result1, "stock");
-          assert.propertyVal(result1, "rel_likes", 2);
+          assert.propertyVal(result1, "rel_likes", 0);
           assert.property(result2, "rel_likes");
           assert.property(result2, "price");
           assert.property(result2, "stock");
-          assert.propertyVal(result2, "rel_likes", -2);
+          assert.propertyVal(result2, "rel_likes", 0);
 
           //complete this one too
           done();
@@ -98,11 +96,11 @@ suite("Functional Tests", function() {
       chai
         .request(server)
         .get("/api/stock-prices")
-        .query({ stock: ["msft", "amzn"], like:true })
+        .query({ stock: ["amzn", "aapl"], like: true })
         .end(function(err, res) {
           let result1 = res.body.stockData[0];
-          let result2 = res.body.stockData[1];        
-          
+          let result2 = res.body.stockData[1];
+
           assert.property(res.body, "stockData");
           assert.isArray(res.body.stockData);
           assert.property(result1, "rel_likes");
