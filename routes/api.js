@@ -27,13 +27,13 @@ module.exports = function(app) {
     let price0 = await getStock(stock[0]);
     let price1 = await getStock(stock[1]);
 
-    for (let i = 0; i < stock.length; i++) {
+    stock.forEach(function(code) {
       if (like) {
-        withLike(stock[i], clientIP, stocklikes);
-      } else if (!stocklikes[stock[i]]) {
-        stocklikes[stock[i]] = { likes: 0, listip: [] };
+        withLike(code, clientIP, stocklikes);
+      } else if (!stocklikes[code]) {
+        stocklikes[code] = { likes: 0, listip: [] };
       }
-    }
+    });
 
     if (req.query.stock instanceof Object) {
       var like1 = stocklikes[stock[0]].likes;
